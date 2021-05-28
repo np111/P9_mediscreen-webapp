@@ -1,0 +1,24 @@
+/*
+ * Theme  variables
+ */
+
+// From antd.theme.js
+$primary-color: #33A75A;
+$text-color: #000;
+
+// Containers
+$header-height: 80px;
+
+$container-margin: 15px;
+
+/*
+ * Utils
+ */
+
+// Antd utils
+@mixin customize-antd() {
+  // :not is used to increase the selector priority above others similar selector (since antd also use :not)
+  &:not(:global(._)) :global {
+    @content
+  }
+}

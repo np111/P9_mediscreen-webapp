@@ -1,0 +1,9 @@
+@import '../../../assets/styles/app.theme';
+
+.title {
+  @include customize-antd {
+    height: 1em;
+    margin-top: 0.1715em;
+    margin-bottom: 0.1715em;
+  }
+}

@@ -1,0 +1,51 @@
+@import '../../assets/styles/app.theme';
+
+.header {
+  @include customize-antd {
+    .ant-menu {
+      flex-grow: 1;
+      min-width: 1px;
+      text-align: right;
+
+      background: transparent;
+      border: none;
+      margin-left: 25px;
+      line-height: 1;
+
+      a:hover, a:active {
+        text-decoration: none;
+      }
+    }
+
+    .ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
+      border: none;
+      margin: 0 0 0 5px;
+      padding: 5px 10px;
+      font-size: 1em;
+      font-weight: 700;
+    }
+
+    .ant-menu-horizontal > .ant-menu-submenu {
+      padding: 0;
+
+      .ant-menu-submenu-title {
+        padding: 5px 10px;
+      }
+    }
+
+    .ant-menu-overflowed-submenu.ant-menu-submenu-selected:first-child {
+      color: $text-color !important;
+    }
+  }
+}
+
+.navbar {
+  height: $header-height;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+}

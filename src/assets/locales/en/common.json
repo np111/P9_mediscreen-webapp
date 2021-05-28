@@ -1,0 +1,14 @@
+{
+  "siteName": "Mediscreen",
+  "logoTag": "Mediscreen logo",
+  "page": {
+    "index": "Patient list"
+  },
+  "patient": {
+    "firstName": "First name",
+    "lastName": "Last name",
+    "gender": "Gender",
+    "birthdate": "Birthdate",
+    "actions": "Actions"
+  }
+}
