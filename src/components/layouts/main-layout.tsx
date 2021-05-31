@@ -4,13 +4,13 @@ import {useTranslation} from '../ui/i18n/use-translation';
 import {TopNavigation, TopNavigationProps} from './top-navigation';
 
 export interface MainLayoutProps {
-    currentPage?: string;
+    section?: string;
     title?: string;
     head?: React.ReactNode;
     topNavigation?: TopNavigationProps;
 }
 
-export function MainLayout({currentPage, title, head, topNavigation, children}: PropsWithChildren<MainLayoutProps>) {
+export function MainLayout({section, title, head, topNavigation, children}: PropsWithChildren<MainLayoutProps>) {
     const {t} = useTranslation();
 
     return (
@@ -23,7 +23,7 @@ export function MainLayout({currentPage, title, head, topNavigation, children}: 
                 {head}
             </Head>
             <div>
-                <TopNavigation currentPage={currentPage} {...topNavigation}/>
+                <TopNavigation currentPage={section} {...topNavigation}/>
                 <main>
                     {children}
                 </main>

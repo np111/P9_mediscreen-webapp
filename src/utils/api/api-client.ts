@@ -1,3 +1,4 @@
+import fetch from 'isomorphic-unfetch';
 import getConfig from 'next/config';
 import {ApiError, ApiResponse} from './response-types';
 
@@ -9,9 +10,9 @@ export interface ApiFetchRequest {
 }
 
 export class ApiClient {
-    private readonly _servicesBaseUrl: { [service: string]: string };
+    private readonly _servicesBaseUrl: {[service: string]: string};
 
-    public constructor(servicesBaseUrl: { [service: string]: string }) {
+    public constructor(servicesBaseUrl: {[service: string]: string}) {
         this._servicesBaseUrl = servicesBaseUrl;
     }
 
@@ -35,7 +36,7 @@ export class ApiClient {
         // Fetch
         const input: RequestInfo = serviceBaseUrl + url;
         const init: RequestInit = {method, headers, body};
-        return window.fetch(input, init).then((httpRes): Promise<ApiResponse<T>> => {
+        return fetch(input, init).then((httpRes): Promise<ApiResponse<T>> => {
             switch (Math.floor(httpRes.status / 100)) {
                 case 2:
                     return this._parseJson(httpRes).then((result) => ({success: true, result}));

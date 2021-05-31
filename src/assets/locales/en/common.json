@@ -2,13 +2,26 @@
   "siteName": "Mediscreen",
   "logoTag": "Mediscreen logo",
   "page": {
-    "index": "Patient list"
+    "patientList": "Patient list"
   },
   "patient": {
+    "addPatient": "Register a new patient",
+    "aPatient": "Patient: {{name}}",
     "firstName": "First name",
     "lastName": "Last name",
     "gender": "Gender",
+    "genders": {
+      "MALE": "Man",
+      "FEMALE": "Woman"
+    },
     "birthdate": "Birthdate",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "postalCode": "Postal code",
+    "state": "State",
+    "country": "Country",
     "actions": "Actions"
-  }
+  },
+  "notAvailable": "N/A"
 }

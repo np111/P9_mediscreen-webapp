@@ -5,9 +5,9 @@ index cf4b421..646d2b7 100644
 @@ -202,7 +202,7 @@ function Overflow(props, ref) {
      return itemWidths.get(getKey(mergedData[index], index));
    }
- 
+
 -  React.useLayoutEffect(function () {
-+  (typeof window === 'undefined' ? React.useEffect : React.useLayoutEffect)(function () {
++  (typeof window === 'undefined' ? React.useEffect : React.useLayoutEffect /* Prevent SSR error */)(function () {
      if (mergedContainerWidth && mergedRestWidth && mergedData) {
        var totalWidth = suffixWidth;
        var len = mergedData.length;

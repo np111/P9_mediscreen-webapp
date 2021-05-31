@@ -9,9 +9,9 @@ import styles from './top-navigation.module.scss';
 const logo = require('../../assets/images/logo_h60.png');
 const logo2x = require('../../assets/images/logo_h60@2x.png');
 
-const index = routes.index();
+const index = routes.patientList();
 const menus = [
-    {id: 'index', link: index},
+    {id: 'patientList', link: index},
 ];
 
 export interface TopNavigationProps {
@@ -31,8 +31,8 @@ export function TopNavigation({currentPage, transparent}: TopNavigationProps) {
                             <a>
                                 <img
                                     alt={t('common:logoTag')}
-                                    width="230px"
-                                    height="60px"
+                                    width='230px'
+                                    height='60px'
                                     src={logo}
                                     srcSet={logo + ' 1x, ' + logo2x + ' 2x'}
                                 />
@@ -40,7 +40,7 @@ export function TopNavigation({currentPage, transparent}: TopNavigationProps) {
                         </Link>
                     </div>
                     <Menu
-                        mode="horizontal"
+                        mode='horizontal'
                         selectedKeys={currentPage ? [currentPage] : []}
                     >
                         {menus.map((menu) => (
