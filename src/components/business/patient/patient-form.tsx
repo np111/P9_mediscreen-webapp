@@ -1,7 +1,7 @@
-import {Radio} from 'antd';
+import {Popconfirm, Radio} from 'antd';
 import moment from 'moment';
 import React, {useCallback, useState} from 'react';
-import {apiClient, ApiException} from '../../../utils/api/api-client';
+import {apiClient, ApiException, UnhandledApiError} from '../../../utils/api/api-client';
 import {ApiPatient} from '../../../utils/api/patients-types';
 import {clearEmpty} from '../../../utils/query-utils';
 import {useCatchAsyncError} from '../../../utils/react-utils';
@@ -12,7 +12,7 @@ import {Input} from '../../ui/form/input';
 import {ToggleElement, ToggleForm} from '../../ui/form/toggle-form';
 import {useForm} from '../../ui/form/use-form';
 import {useTranslation} from '../../ui/i18n/use-translation';
-import {Space} from '../../ui/layout/space';
+import {HorizontalSpace, Space} from '../../ui/layout/space';
 import {Spin} from '../../ui/spin';
 import {Address} from './address';
 import {Birthdate} from './birthdate';
@@ -29,20 +29,21 @@ import {State} from './state';
 export interface PatientFormProps {
     patient?: ApiPatient;
     onChange?: (newPatient: ApiPatient) => void;
+    onDelete?: () => void;
     initialEditable?: boolean;
 }
 
-export function PatientForm({patient, initialEditable, onChange}: PatientFormProps) {
+export function PatientForm({patient, initialEditable, onChange, onDelete}: PatientFormProps) {
     const {t} = useTranslation();
+    const catchAsyncError = useCatchAsyncError();
 
     const [form] = useForm();
-    const [loading, setLoading] = useState(false);
-    const catchAsyncError = useCatchAsyncError();
 
     const [editable, setEditable] = useState(!!initialEditable);
     const toggleEditable = useCallback(() => setEditable(!editable), [editable, setEditable]);
 
-    const onSubmit = useCallback((values) => {
+    const [loading, setLoading] = useState(false);
+    const updatePatient = useCallback((values) => {
         setLoading(true);
         apiClient.fetchOrThrow<ApiPatient>({
             service: 'patients',
@@ -63,11 +64,31 @@ export function PatientForm({patient, initialEditable, onChange}: PatientFormPro
         });
     }, [patient, setLoading, catchAsyncError, form, onChange]);
 
+    const deletePatient = useCallback(() => {
+        if (!patient) return;
+        setLoading(true);
+        apiClient.fetch<ApiPatient>({
+            service: 'patients',
+            url: '/patient/' + encodeURIComponent(patient.id),
+            method: 'DELETE',
+        }).then((res) => {
+            setLoading(false);
+            if (res.success || res.error.code === 'PATIENT_NOT_FOUND') {
+                onDelete?.();
+                return;
+            }
+            throw new UnhandledApiError(res.error);
+        }).catch((err) => {
+            setLoading(false);
+            catchAsyncError(err);
+        });
+    }, [patient, setLoading, catchAsyncError, onDelete]);
+
     return (
         <Spin spinning={loading}>
             <ToggleForm
                 form={form}
-                onFinish={onSubmit}
+                onFinish={updatePatient}
                 layout='horizontal'
                 initialValues={patientToValues(patient)}
                 editable={!patient || editable}
@@ -113,16 +134,25 @@ export function PatientForm({patient, initialEditable, onChange}: PatientFormPro
                 <FormItem name='countryCode' label={t('common:patient.country')}>
                     <ToggleElement renderView={<Country/>} renderInput={<CountrySelect/>}/>
                 </FormItem>
-                <FormItem>
-                    {!patient || editable ? (
-                        <Space direction='horizontal'>
-                            <Button htmlType='reset' onClick={toggleEditable}>{patient ? 'Cancel' : 'Reset'}</Button>
-                            <Button htmlType='submit' type='primary'>Save</Button>
-                        </Space>
-                    ) : (
-                        <Button onClick={toggleEditable}>Edit</Button>
-                    )}
-                </FormItem>
+                {!patient || editable ? (
+                    <FormItem>
+                        <HorizontalSpace>
+                            <Space direction='horizontal'>
+                                <Button htmlType='reset' onClick={toggleEditable}>{t(patient ? 'common:cancel' : 'common:reset')}</Button>
+                                <Button htmlType='submit' type='primary'>{t('common:save')}</Button>
+                            </Space>
+                            {!patient ? undefined : (
+                                <Popconfirm title={t('common:doYouWantToDelete')} okText={t('common:yes')} onConfirm={deletePatient}>
+                                    <Button danger={true}>{t('common:delete')}</Button>
+                                </Popconfirm>
+                            )}
+                        </HorizontalSpace>
+                    </FormItem>
+                ) : (
+                    <FormItem>
+                        <Button onClick={toggleEditable}>{t('common:edit')}</Button>
+                    </FormItem>
+                )}
             </ToggleForm>
         </Spin>
     );

@@ -5,7 +5,7 @@ import {qs} from './utils/query-utils';
 
 export const routes = {
     patientList: () => ({href: '/'}),
-
+    addPatient: () => ({href: '/patient/add'}),
     patient: ({patientId, edit}: {patientId: string; edit?: boolean}) => ({
         href: '/patient/[patientId]' + qs({patientId, edit}),
         as: '/patient/' + encodeURIComponent(patientId) + qs({edit}),

@@ -23,5 +23,12 @@
     "country": "Country",
     "actions": "Actions"
   },
+  "yes": "Yes",
+  "edit": "Edit",
+  "cancel": "Cancel",
+  "reset": "Reset",
+  "save": "Save",
+  "delete": "Delete",
+  "doYouWantToDelete": "Do you really want to delete?",
   "notAvailable": "N/A"
 }

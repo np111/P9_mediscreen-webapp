@@ -1,5 +1,7 @@
-import {EditOutlined, EyeOutlined, SearchOutlined} from '@ant-design/icons';
-import React, {useMemo} from 'react';
+import {EditOutlined, EyeOutlined, PlusOutlined, SearchOutlined} from '@ant-design/icons';
+import {Button} from 'antd';
+import {matchSorter} from 'match-sorter';
+import React, {useCallback, useMemo, useState} from 'react';
 import useSWR from 'swr';
 import {Birthdate} from '../components/business/patient/birthdate';
 import {FirstName} from '../components/business/patient/first-name';
@@ -70,18 +72,39 @@ export default function IndexPage() {
         bordered: true,
     }), [t]);
 
+    const [search, setSearch] = useState('');
+    const onSearchChange = useCallback((e) => setSearch(e.target.value), [setSearch]);
+    const filteredPatients = useMemo(() => !patients ? undefined : filterPatients(patients, search), [patients, search]);
+
     return (
         <MainLayout title={t('common:page.patientList')} section='patientList'>
             <Container>
                 <Input
                     prefix={<SearchOutlined style={{opacity: .5}}/>}
                     allowClear={true}
+                    value={search}
+                    onChange={onSearchChange}
                 />
+                <Link {...routes.addPatient()}>
+                    <Button title={t('common:patient.addPatient')}><PlusOutlined/></Button>
+                </Link>
                 <SkeletonTable
                     {...tableProps}
-                    dataSource={patients}
+                    dataSource={filteredPatients}
                 />
             </Container>
         </MainLayout>
     );
+}
+
+function filterPatients(patients: ApiPatient[], search: string) {
+    if (search) {
+        patients = search
+            .split(/\s+/)
+            .filter((word) => !!word.length)
+            .reduceRight(
+                (patients, word) => matchSorter(patients, word, {keys: ['firstName', 'lastName']}),
+                patients);
+    }
+    return patients;
 }

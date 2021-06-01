@@ -5,7 +5,7 @@ import {MainLayout} from '../../components/layouts/main-layout';
 import {useTranslation} from '../../components/ui/i18n/use-translation';
 import {Container} from '../../components/ui/layout/container';
 import {PageHeader} from '../../components/ui/layout/page-header';
-import {routes} from '../../routes';
+import {AppRouter, routes} from '../../routes';
 import {apiClient, UnhandledApiError} from '../../utils/api/api-client';
 import {ApiPatient} from '../../utils/api/patients-types';
 import {formatNA} from '../../utils/format';
@@ -23,6 +23,10 @@ export default function PatientPage({patient: initialPatient, edit}: PatientPage
         // TODO: Notification
         setPatient(patient);
     }, [setPatient]);
+    const onDelete = useCallback(() => {
+        // TODO: Notification
+        return AppRouter.push(routes.patientList());
+    }, []);
 
     const title = t('common:patient.aPatient', {name: formatNA(t, patient.firstName) + ' ' + formatNA(t, patient.lastName)});
     return (
@@ -32,7 +36,7 @@ export default function PatientPage({patient: initialPatient, edit}: PatientPage
                     title={title}
                     back={routes.patientList()}
                 />
-                <PatientForm patient={patient} onChange={onUpdate} initialEditable={edit}/>
+                <PatientForm patient={patient} onChange={onUpdate} onDelete={onDelete} initialEditable={edit}/>
             </Container>
         </MainLayout>
     );
