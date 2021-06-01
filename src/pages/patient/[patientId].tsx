@@ -1,6 +1,8 @@
 import {GetServerSidePropsContext, GetServerSidePropsResult} from 'next';
 import React, {useCallback, useState} from 'react';
-import {PatientForm} from '../../components/business/patient/patient-form';
+import {AssessmentBanner} from '../../components/business/assessments/assessment-banner';
+import {NotesList} from '../../components/business/notes/notes-list';
+import {PatientForm} from '../../components/business/patients/patient-form';
 import {MainLayout} from '../../components/layouts/main-layout';
 import {useTranslation} from '../../components/ui/i18n/use-translation';
 import {Container} from '../../components/ui/layout/container';
@@ -18,10 +20,14 @@ export interface PatientPageProps {
 
 export default function PatientPage({patient: initialPatient, edit}: PatientPageProps) {
     const {t} = useTranslation();
+
     const [patient, setPatient] = useState(initialPatient);
+    const [assessmentKey, setAssessmentKey] = useState(() => Math.random());
+
     const onUpdate = useCallback((patient: ApiPatient) => {
         // TODO: Notification
         setPatient(patient);
+        setAssessmentKey(Math.random());
     }, [setPatient]);
     const onDelete = useCallback(() => {
         // TODO: Notification
@@ -36,7 +42,15 @@ export default function PatientPage({patient: initialPatient, edit}: PatientPage
                     title={title}
                     back={routes.patientList()}
                 />
-                <PatientForm patient={patient} onChange={onUpdate} onDelete={onDelete} initialEditable={edit}/>
+                <div>
+                    <PatientForm patient={patient} onChange={onUpdate} onDelete={onDelete} initialEditable={edit}/>
+                </div>
+                <div>
+                    <AssessmentBanner key={assessmentKey} patient={patient}/>
+                </div>
+                <div>
+                    <NotesList patient={patient}/>
+                </div>
             </Container>
         </MainLayout>
     );

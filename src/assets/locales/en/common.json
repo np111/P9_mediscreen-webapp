@@ -23,6 +23,18 @@
     "country": "Country",
     "actions": "Actions"
   },
+  "assessment": {
+    "riskLevel": "Risk level: <0/>",
+    "riskLevels": {
+      "UNKNOWN": "Unknown",
+      "NONE": "None",
+      "BORDERLINE": "Borderline",
+      "IN_DANGER": "Danger",
+      "EARLY_ONSET": "Early Onset"
+    },
+    "termsList": "Triggering terms: {{terms}}",
+    "missingField": "A required field is incomplete: {{field}}"
+  },
   "yes": "Yes",
   "edit": "Edit",
   "cancel": "Cancel",

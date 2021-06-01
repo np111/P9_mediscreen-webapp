@@ -1,4 +1,3 @@
-import {Popconfirm, Radio} from 'antd';
 import moment from 'moment';
 import React, {useCallback, useState} from 'react';
 import {apiClient, ApiException, UnhandledApiError} from '../../../utils/api/api-client';
@@ -9,10 +8,12 @@ import {Button} from '../../ui/button';
 import {FormItem} from '../../ui/form';
 import {DatePicker} from '../../ui/form/date-picker';
 import {Input} from '../../ui/form/input';
+import {Radio} from '../../ui/form/radio';
 import {ToggleElement, ToggleForm} from '../../ui/form/toggle-form';
 import {useForm} from '../../ui/form/use-form';
 import {useTranslation} from '../../ui/i18n/use-translation';
 import {HorizontalSpace, Space} from '../../ui/layout/space';
+import {Popconfirm} from '../../ui/popconfirm';
 import {Spin} from '../../ui/spin';
 import {Address} from './address';
 import {Birthdate} from './birthdate';

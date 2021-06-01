@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {PatientForm} from '../../components/business/patient/patient-form';
+import {PatientForm} from '../../components/business/patients/patient-form';
 import {MainLayout} from '../../components/layouts/main-layout';
 import {useTranslation} from '../../components/ui/i18n/use-translation';
 import {Container} from '../../components/ui/layout/container';
