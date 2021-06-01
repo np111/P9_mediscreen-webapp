@@ -5,9 +5,12 @@ import {NotesList} from '../../components/business/notes/notes-list';
 import {PatientForm} from '../../components/business/patients/patient-form';
 import {getPatientName} from '../../components/business/patients/patient-utils';
 import {MainLayout} from '../../components/layouts/main-layout';
+import {Button} from '../../components/ui/button';
 import {useTranslation} from '../../components/ui/i18n/use-translation';
+import {Card} from '../../components/ui/layout/card';
 import {Container} from '../../components/ui/layout/container';
 import {PageHeader} from '../../components/ui/layout/page-header';
+import {Space} from '../../components/ui/layout/space';
 import {AppRouter, routes} from '../../routes';
 import {apiClient, UnhandledApiError} from '../../utils/api/api-client';
 import {ApiPatient} from '../../utils/api/patients-types';
@@ -18,18 +21,22 @@ export interface PatientPageProps {
     edit?: boolean;
 }
 
-export default function PatientPage({patient: initialPatient, edit}: PatientPageProps) {
+export default function PatientPage({patient: initialPatient, edit: initialEditable}: PatientPageProps) {
     const {t} = useTranslation();
 
-    const [patient, setPatient] = useState(initialPatient);
     const [assessmentKey, setAssessmentKey] = useState(() => Math.random());
     const revalidateAssessment = useCallback(() => setAssessmentKey(Math.random()), [setAssessmentKey]);
 
+    const [patient, setPatient] = useState(initialPatient);
+    const [editable, setEditable] = useState(!!initialEditable);
+    const toggleEditable = useCallback(() => setEditable(!editable), [editable, setEditable]);
+
     const onUpdate = useCallback((patient: ApiPatient) => {
         // TODO: Notification
+        setEditable(false);
         setPatient(patient);
         revalidateAssessment();
-    }, [setPatient, revalidateAssessment]);
+    }, [setPatient, setEditable, revalidateAssessment]);
     const onDelete = useCallback(() => {
         // TODO: Notification
         return AppRouter.push(routes.patientList());
@@ -39,19 +46,30 @@ export default function PatientPage({patient: initialPatient, edit}: PatientPage
     return (
         <MainLayout title={title} section='patientList'>
             <Container>
-                <PageHeader
-                    title={title}
-                    back={routes.patientList()}
-                />
-                <div>
-                    <PatientForm patient={patient} onUpdate={onUpdate} onDelete={onDelete} initialEditable={edit}/>
-                </div>
-                <div>
-                    <AssessmentBanner key={assessmentKey} patient={patient}/>
-                </div>
-                <div>
-                    <NotesList patient={patient} onChange={revalidateAssessment}/>
-                </div>
+                <Card>
+                    <PageHeader
+                        title={title}
+                        back={routes.patientList()}
+                        extra={(
+                            <Button onClick={toggleEditable}>{t(!editable ? 'common:edit' : 'common:cancel')}</Button>
+                        )}
+                    />
+                    <PatientForm patient={patient} editable={editable} onUpdate={onUpdate} onDelete={onDelete}/>
+                </Card>
+                <Card>
+                    <PageHeader
+                        title={t('common:note.notes')}
+                        extra={(
+                            <Space wrap={true} divider={true}>
+                                <AssessmentBanner key={assessmentKey} patient={patient}/>
+                                <Button type='primary'>{t('common:note.addNote')}</Button>
+                            </Space>
+                        )}
+                    />
+                    <div>
+                        <NotesList patient={patient} onChange={revalidateAssessment}/>
+                    </div>
+                </Card>
             </Container>
         </MainLayout>
     );

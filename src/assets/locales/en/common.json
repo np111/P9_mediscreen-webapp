@@ -5,6 +5,8 @@
     "patientList": "Patient list"
   },
   "patient": {
+    "search": "Search patient (by name)",
+    "addPatientShort": "New patient",
     "addPatient": "Register a new patient",
     "aPatient": "Patient: {{name}}",
     "firstName": "First name",
@@ -21,12 +23,15 @@
     "postalCode": "Postal code",
     "state": "State",
     "country": "Country",
-    "actions": "Actions"
+    "actions": "Actions",
+    "doYouWantToDelete": "Do you really want to permanently delete this patient?"
   },
   "note": {
+    "notes": "Notes",
     "addNote": "Write a note",
     "addNoteFor": "Write a note for {{patient}}",
-    "content": "Content"
+    "content": "Content",
+    "doYouWantToDelete": "Do you really want to delete this note?"
   },
   "assessment": {
     "riskLevel": "Risk level: <0/>",
@@ -47,6 +52,5 @@
   "reset": "Reset",
   "save": "Save",
   "delete": "Delete",
-  "doYouWantToDelete": "Do you really want to delete?",
   "notAvailable": "N/A"
 }

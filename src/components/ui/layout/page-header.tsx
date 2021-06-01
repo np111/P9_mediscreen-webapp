@@ -11,5 +11,11 @@ export function PageHeader({back, onBack, ...pageHeaderProps}: PageHeaderProps) 
     if (onBack === undefined && back) {
         onBack = () => AppRouter.push(back);
     }
-    return <AntPageHeader {...pageHeaderProps} onBack={onBack}/>;
+    return (
+        <AntPageHeader
+            {...pageHeaderProps}
+            style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, ...pageHeaderProps.style}}
+            onBack={onBack}
+        />
+    );
 }

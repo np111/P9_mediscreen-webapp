@@ -1,4 +1,3 @@
-import {Spin} from 'antd';
 import React, {useCallback, useState} from 'react';
 import {apiClient, ApiException} from '../../../utils/api/api-client';
 import {API_NOTE_MAX_LENGTH, ApiNote} from '../../../utils/api/notes-types';
@@ -9,6 +8,7 @@ import {Form, FormItem} from '../../ui/form';
 import {Input} from '../../ui/form/input';
 import {useForm} from '../../ui/form/use-form';
 import {useTranslation} from '../../ui/i18n/use-translation';
+import {Spin} from '../../ui/spin';
 
 export interface NoteFormProps {
     patient: ApiPatient;
@@ -54,7 +54,7 @@ export function NoteForm({patient, note, onUpdate}: NoteFormProps) {
                 <FormItem name='content' label={t('common:note.content')}>
                     <Input.TextArea rows={12} autoSize={false} showCount={true} maxLength={API_NOTE_MAX_LENGTH}/>
                 </FormItem>
-                <FormItem style={{textAlign: 'center'}}>
+                <FormItem>
                     <Button htmlType='submit' type='primary'>{t(note ? 'common:edit' : 'common:add')}</Button>
                 </FormItem>
             </Form>

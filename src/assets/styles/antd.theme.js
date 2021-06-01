@@ -1,3 +1,5 @@
 module.exports = {
-    'primary-color': '#33A75A',
+    'font-family': '\'Open Sans\', sans-serif',
+    'pagination-font-family': '@font-family',
+    'primary-color': '#3086F9',
 };

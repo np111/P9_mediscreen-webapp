@@ -1,0 +1,12 @@
+@import '../../../assets/styles/app.theme';
+
+.colForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+
+  > :global(.ant-form-item) {
+    flex: 1 0 320px;
+    margin-bottom: 0;
+  }
+}

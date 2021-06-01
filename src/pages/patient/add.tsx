@@ -2,6 +2,7 @@ import React, {useCallback} from 'react';
 import {PatientForm} from '../../components/business/patients/patient-form';
 import {MainLayout} from '../../components/layouts/main-layout';
 import {useTranslation} from '../../components/ui/i18n/use-translation';
+import {Card} from '../../components/ui/layout/card';
 import {Container} from '../../components/ui/layout/container';
 import {PageHeader} from '../../components/ui/layout/page-header';
 import {AppRouter, routes} from '../../routes';
@@ -18,11 +19,13 @@ export default function AddPatientPage() {
     return (
         <MainLayout title={title} section='patientList'>
             <Container>
-                <PageHeader
-                    title={title}
-                    back={routes.patientList()}
-                />
-                <PatientForm onUpdate={onCreate}/>
+                <Card>
+                    <PageHeader
+                        title={title}
+                        back={routes.patientList()}
+                    />
+                    <PatientForm onUpdate={onCreate} editable={true}/>
+                </Card>
             </Container>
         </MainLayout>
     );

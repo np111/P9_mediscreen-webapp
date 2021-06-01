@@ -3,13 +3,21 @@
  */
 
 // From antd.theme.js
-$primary-color: #33A75A;
+$primary-color: #3086f9;
 $text-color: #000;
 
+// Cards
+
 // Containers
+$body-bg-color: #f8f9fe;
 $header-height: 80px;
 
 $container-margin: 15px;
+$section-margin: 20px;
+
+$card-bg-color: #fff;
+$card-border-color: #ebf0fa;
+$card-border-radius: 15px;
 
 /*
  * Utils

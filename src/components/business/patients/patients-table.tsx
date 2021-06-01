@@ -8,6 +8,7 @@ import {ApiPatient} from '../../../utils/api/patients-types';
 import {Button} from '../../ui/button';
 import {Input} from '../../ui/form/input';
 import {useTranslation} from '../../ui/i18n/use-translation';
+import {PageHeader} from '../../ui/layout/page-header';
 import {Space} from '../../ui/layout/space';
 import {TableProps} from '../../ui/table';
 import {SkeletonTable} from '../../ui/table/skeleton-table';
@@ -67,7 +68,7 @@ export function PatientsTable() {
             },
         }],
         size: 'small',
-        bordered: true,
+        bordered: false,
     }), [t]);
 
     const [search, setSearch] = useState('');
@@ -76,15 +77,24 @@ export function PatientsTable() {
 
     return (
         <>
-            <Input
-                prefix={<SearchOutlined style={{opacity: .5}}/>}
-                allowClear={true}
-                value={search}
-                onChange={onSearchChange}
+            <PageHeader
+                title={t('common:page.patientList')}
+                extra={(
+                    <Space wrap={true}>
+                        <Input
+                            size='large'
+                            placeholder={t('common:patient.search')}
+                            prefix={<SearchOutlined style={{opacity: .5}}/>}
+                            allowClear={true}
+                            value={search}
+                            onChange={onSearchChange}
+                        />
+                        <Link {...routes.addPatient()}>
+                            <Button size='large' type='primary'><PlusOutlined/> {t('common:patient.addPatientShort')}</Button>
+                        </Link>
+                    </Space>
+                )}
             />
-            <Link {...routes.addPatient()}>
-                <Button title={t('common:patient.addPatient')}><PlusOutlined/></Button>
-            </Link>
             <SkeletonTable
                 {...tableProps}
                 dataSource={filteredPatients}

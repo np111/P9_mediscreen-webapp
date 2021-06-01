@@ -23,25 +23,24 @@ import {CountrySelect} from './country-select';
 import {FirstName} from './first-name';
 import {Gender} from './gender';
 import {LastName} from './last-name';
+import styles from './patient-form.module.scss';
 import {Phone} from './phone';
 import {PostalCode} from './postal-code';
 import {State} from './state';
 
 export interface PatientFormProps {
     patient?: ApiPatient;
+    editable: boolean;
     onUpdate?: (newPatient: ApiPatient) => void;
     onDelete?: () => void;
-    initialEditable?: boolean;
 }
 
-export function PatientForm({patient, initialEditable, onUpdate, onDelete}: PatientFormProps) {
+export function PatientForm({patient, editable, onUpdate, onDelete}: PatientFormProps) {
     const {t} = useTranslation();
     const catchAsyncError = useCatchAsyncError();
 
     const [form] = useForm();
     const [loading, setLoading] = useState(false);
-    const [editable, setEditable] = useState(!!initialEditable);
-    const toggleEditable = useCallback(() => setEditable(!editable), [editable, setEditable]);
 
     const updatePatient = useCallback((values) => {
         setLoading(true);
@@ -51,7 +50,6 @@ export function PatientForm({patient, initialEditable, onUpdate, onDelete}: Pati
             body: valuesToPatient(values),
         }).then((newPatient) => {
             setLoading(false);
-            setEditable(false);
             onUpdate?.(newPatient);
         }).catch((err) => {
             setLoading(false);
@@ -89,9 +87,10 @@ export function PatientForm({patient, initialEditable, onUpdate, onDelete}: Pati
             <ToggleForm
                 form={form}
                 onFinish={updatePatient}
-                layout='horizontal'
+                layout={'horizontal'}
                 initialValues={patientToValues(patient)}
-                editable={!patient || editable}
+                editable={editable}
+                className={editable ? undefined : styles.colForm}
             >
                 <FormItem name='firstName' label={t('common:patient.firstName')}>
                     <ToggleElement renderView={<FirstName/>} renderInput={<Input/>}/>
@@ -107,7 +106,7 @@ export function PatientForm({patient, initialEditable, onUpdate, onDelete}: Pati
                         renderView={<Gender/>}
                         renderInput={(
                             <Radio.Group>
-                                <Space direction='horizontal'>
+                                <Space wrap={true}>
                                     <Radio.Button value={undefined}>{t('common:notAvailable')}</Radio.Button>
                                     <Radio.Button value='MALE'><Gender value='MALE'/></Radio.Button>
                                     <Radio.Button value='FEMALE'><Gender value='FEMALE'/></Radio.Button>
@@ -134,23 +133,21 @@ export function PatientForm({patient, initialEditable, onUpdate, onDelete}: Pati
                 <FormItem name='countryCode' label={t('common:patient.country')}>
                     <ToggleElement renderView={<Country/>} renderInput={<CountrySelect/>}/>
                 </FormItem>
-                {!patient || editable ? (
+                {!editable ? undefined : (
                     <FormItem>
                         <HorizontalSpace>
-                            <Space direction='horizontal'>
-                                <Button htmlType='reset' onClick={toggleEditable}>{t(patient ? 'common:cancel' : 'common:reset')}</Button>
-                                <Button htmlType='submit' type='primary'>{t('common:save')}</Button>
-                            </Space>
+                            <Button htmlType='submit' type='primary'>{t('common:save')}</Button>
                             {!patient ? undefined : (
-                                <Popconfirm title={t('common:doYouWantToDelete')} okText={t('common:yes')} onConfirm={deletePatient}>
+                                <Popconfirm
+                                    placement='topRight'
+                                    title={t('common:patient.doYouWantToDelete')}
+                                    okText={t('common:yes')}
+                                    onConfirm={deletePatient}
+                                >
                                     <Button danger={true}>{t('common:delete')}</Button>
                                 </Popconfirm>
                             )}
                         </HorizontalSpace>
-                    </FormItem>
-                ) : (
-                    <FormItem>
-                        <Button onClick={toggleEditable}>{t('common:edit')}</Button>
                     </FormItem>
                 )}
             </ToggleForm>

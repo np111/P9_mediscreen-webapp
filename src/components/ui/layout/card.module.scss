@@ -1,0 +1,34 @@
+@import '../../../assets/styles/app.theme';
+
+.card {
+  background: $card-bg-color;
+  border: 1px solid $card-border-color;
+  padding: 20px;
+  border-radius: $card-border-radius;
+  // @include mdElevation(1);
+}
+
+.marginTop {
+  margin-top: $section-margin;
+}
+
+.noPadding {
+  padding: 0;
+}
+
+.rounded {
+  border-radius: 9999px;
+}
+
+.clearPaddingHorizontal {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.clearPaddingTop {
+  margin-top: -20px;
+}
+
+.clearPaddingBottom {
+  margin-bottom: -20px;
+}

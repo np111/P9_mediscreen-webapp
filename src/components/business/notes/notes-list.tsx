@@ -105,7 +105,7 @@ function NoteItem({note, onUpdateClick, onDeleteClick}: NoteItemProps) {
         <List.Item
             actions={[
                 <div key={0}>
-                    <Space direction='horizontal'>
+                    <Space>
                         {note.createdAt}
                         {note.updatedAt === note.createdAt ? undefined : (
                             'Updated on ' + note.updatedAt
@@ -114,7 +114,7 @@ function NoteItem({note, onUpdateClick, onDeleteClick}: NoteItemProps) {
                 </div>,
                 <Button key={1} type='link' size='small' onClick={onUpdateClick}><EditOutlined/></Button>,
                 (
-                    <Popconfirm key={2} title={t('common:doYouWantToDelete')} okText={t('common:yes')} onConfirm={onDeleteClick}>
+                    <Popconfirm key={2} title={t('common:note.doYouWantToDelete')} okText={t('common:yes')} onConfirm={onDeleteClick}>
                         <Button type='link' size='small'><DeleteOutlined/></Button>
                     </Popconfirm>
                 ),

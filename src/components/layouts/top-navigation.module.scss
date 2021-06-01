@@ -1,6 +1,9 @@
 @import '../../assets/styles/app.theme';
 
 .header {
+  background-color: $card-bg-color;
+  border-bottom: 1px solid $card-border-color;
+
   @include customize-antd {
     .ant-menu {
       flex-grow: 1;
