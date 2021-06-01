@@ -3,6 +3,7 @@ import React, {useCallback, useState} from 'react';
 import {AssessmentBanner} from '../../components/business/assessments/assessment-banner';
 import {NotesList} from '../../components/business/notes/notes-list';
 import {PatientForm} from '../../components/business/patients/patient-form';
+import {getPatientName} from '../../components/business/patients/patient-utils';
 import {MainLayout} from '../../components/layouts/main-layout';
 import {useTranslation} from '../../components/ui/i18n/use-translation';
 import {Container} from '../../components/ui/layout/container';
@@ -10,7 +11,6 @@ import {PageHeader} from '../../components/ui/layout/page-header';
 import {AppRouter, routes} from '../../routes';
 import {apiClient, UnhandledApiError} from '../../utils/api/api-client';
 import {ApiPatient} from '../../utils/api/patients-types';
-import {formatNA} from '../../utils/format';
 import {isUUID} from '../../utils/validation';
 
 export interface PatientPageProps {
@@ -23,18 +23,19 @@ export default function PatientPage({patient: initialPatient, edit}: PatientPage
 
     const [patient, setPatient] = useState(initialPatient);
     const [assessmentKey, setAssessmentKey] = useState(() => Math.random());
+    const revalidateAssessment = useCallback(() => setAssessmentKey(Math.random()), [setAssessmentKey]);
 
     const onUpdate = useCallback((patient: ApiPatient) => {
         // TODO: Notification
         setPatient(patient);
-        setAssessmentKey(Math.random());
-    }, [setPatient]);
+        revalidateAssessment();
+    }, [setPatient, revalidateAssessment]);
     const onDelete = useCallback(() => {
         // TODO: Notification
         return AppRouter.push(routes.patientList());
     }, []);
 
-    const title = t('common:patient.aPatient', {name: formatNA(t, patient.firstName) + ' ' + formatNA(t, patient.lastName)});
+    const title = t('common:patient.aPatient', {name: getPatientName(t, patient)});
     return (
         <MainLayout title={title} section='patientList'>
             <Container>
@@ -43,13 +44,13 @@ export default function PatientPage({patient: initialPatient, edit}: PatientPage
                     back={routes.patientList()}
                 />
                 <div>
-                    <PatientForm patient={patient} onChange={onUpdate} onDelete={onDelete} initialEditable={edit}/>
+                    <PatientForm patient={patient} onUpdate={onUpdate} onDelete={onDelete} initialEditable={edit}/>
                 </div>
                 <div>
                     <AssessmentBanner key={assessmentKey} patient={patient}/>
                 </div>
                 <div>
-                    <NotesList patient={patient}/>
+                    <NotesList patient={patient} onChange={revalidateAssessment}/>
                 </div>
             </Container>
         </MainLayout>

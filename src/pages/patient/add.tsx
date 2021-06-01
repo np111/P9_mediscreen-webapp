@@ -22,7 +22,7 @@ export default function AddPatientPage() {
                     title={title}
                     back={routes.patientList()}
                 />
-                <PatientForm onChange={onCreate}/>
+                <PatientForm onUpdate={onCreate}/>
             </Container>
         </MainLayout>
     );

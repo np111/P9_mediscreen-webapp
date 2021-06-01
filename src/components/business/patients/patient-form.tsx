@@ -29,21 +29,20 @@ import {State} from './state';
 
 export interface PatientFormProps {
     patient?: ApiPatient;
-    onChange?: (newPatient: ApiPatient) => void;
+    onUpdate?: (newPatient: ApiPatient) => void;
     onDelete?: () => void;
     initialEditable?: boolean;
 }
 
-export function PatientForm({patient, initialEditable, onChange, onDelete}: PatientFormProps) {
+export function PatientForm({patient, initialEditable, onUpdate, onDelete}: PatientFormProps) {
     const {t} = useTranslation();
     const catchAsyncError = useCatchAsyncError();
 
     const [form] = useForm();
-
+    const [loading, setLoading] = useState(false);
     const [editable, setEditable] = useState(!!initialEditable);
     const toggleEditable = useCallback(() => setEditable(!editable), [editable, setEditable]);
 
-    const [loading, setLoading] = useState(false);
     const updatePatient = useCallback((values) => {
         setLoading(true);
         apiClient.fetchOrThrow<ApiPatient>({
@@ -53,7 +52,7 @@ export function PatientForm({patient, initialEditable, onChange, onDelete}: Pati
         }).then((newPatient) => {
             setLoading(false);
             setEditable(false);
-            onChange?.(newPatient);
+            onUpdate?.(newPatient);
         }).catch((err) => {
             setLoading(false);
             if (err instanceof ApiException) {
@@ -63,7 +62,7 @@ export function PatientForm({patient, initialEditable, onChange, onDelete}: Pati
             }
             catchAsyncError(err);
         });
-    }, [patient, setLoading, catchAsyncError, form, onChange]);
+    }, [patient, setLoading, catchAsyncError, form, onUpdate]);
 
     const deletePatient = useCallback(() => {
         if (!patient) return;

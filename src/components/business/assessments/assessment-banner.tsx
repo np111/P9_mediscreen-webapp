@@ -58,7 +58,7 @@ function RiskLevelTag(assessment: AssessmentResult) {
     let help;
     if (assessment.missingField) {
         help = t('common:assessment.missingField', {field: assessment.missingField});
-    } else {
+    } else if (assessment.terms && assessment.terms.length) {
         help = t('common:assessment.termsList', {terms: assessment.terms.join(', ')});
     }
 

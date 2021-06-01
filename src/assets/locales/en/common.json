@@ -23,6 +23,11 @@
     "country": "Country",
     "actions": "Actions"
   },
+  "note": {
+    "addNote": "Write a note",
+    "addNoteFor": "Write a note for {{patient}}",
+    "content": "Content"
+  },
   "assessment": {
     "riskLevel": "Risk level: <0/>",
     "riskLevels": {
@@ -36,6 +41,7 @@
     "missingField": "A required field is incomplete: {{field}}"
   },
   "yes": "Yes",
+  "add": "Add",
   "edit": "Edit",
   "cancel": "Cancel",
   "reset": "Reset",
