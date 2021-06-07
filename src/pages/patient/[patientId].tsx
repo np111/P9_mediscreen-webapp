@@ -9,6 +9,7 @@ import {useTranslation} from '../../components/ui/i18n/use-translation';
 import {Card} from '../../components/ui/layout/card';
 import {Container} from '../../components/ui/layout/container';
 import {PageHeader} from '../../components/ui/layout/page-header';
+import {notification} from '../../components/ui/util/notification';
 import {AppRouter, routes} from '../../routes';
 import {apiClient, UnhandledApiError} from '../../utils/api/api-client';
 import {ApiPatient} from '../../utils/api/patients-types';
@@ -30,15 +31,17 @@ export default function PatientPage({patient: initialPatient, edit: initialEdita
     const toggleEditable = useCallback(() => setEditable(!editable), [editable, setEditable]);
 
     const onUpdate = useCallback((patient: ApiPatient) => {
-        // TODO: Notification
+        notification.open({type: 'success', message: t('common:patient.patientSaved')});
+
         setEditable(false);
         setPatient(patient);
         revalidateAssessment();
-    }, [setPatient, setEditable, revalidateAssessment]);
+    }, [t, setPatient, setEditable, revalidateAssessment]);
     const onDelete = useCallback(() => {
-        // TODO: Notification
+        notification.open({type: 'success', message: t('common:patient.patientDeleted')});
+
         return AppRouter.push(routes.patientList());
-    }, []);
+    }, [t]);
 
     const title = t('common:patient.aPatient', {name: getPatientName(t, patient)});
     return (

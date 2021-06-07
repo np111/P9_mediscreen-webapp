@@ -14,6 +14,7 @@ import {Space} from '../../ui/layout/space';
 import {Popconfirm} from '../../ui/popconfirm';
 import {Skeleton} from '../../ui/skeleton';
 import {ErrorPane} from '../../ui/util/error';
+import {notification} from '../../ui/util/notification';
 import {AssessmentBanner} from '../assessments/assessment-banner';
 import {getPatientName} from '../patients/patient-utils';
 import {NoteForm} from './note-form';
@@ -41,11 +42,11 @@ export function NotesList({patient, assessmentKey, onChange}: NotesListProps) {
     const showAddNote = useCallback(() => showEditNote(), [showEditNote]);
     const hideEditNote = useCallback(() => setEditNote(undefined), []);
     const onNoteUpdate = useCallback(() => {
-        // TODO: Notification
+        notification.open({type: 'success', message: t('common:note.noteSaved')});
 
         hideEditNote();
         notifyChange();
-    }, [notifyChange, hideEditNote]);
+    }, [t, notifyChange, hideEditNote]);
 
     const renderNoteItem = useCallback((note: ApiNote) => {
         function updateNote() {
@@ -59,6 +60,8 @@ export function NotesList({patient, assessmentKey, onChange}: NotesListProps) {
                 method: 'DELETE',
             }).then((res) => {
                 if (res.success || res.error.code === 'NOTE_NOT_FOUND') {
+                    notification.open({type: 'success', message: t('common:note.noteDeleted')});
+
                     return notifyChange();
                 }
                 throw new UnhandledApiError(res.error);
@@ -68,7 +71,7 @@ export function NotesList({patient, assessmentKey, onChange}: NotesListProps) {
         }
 
         return <NoteItem key={note.id} note={note} onUpdateClick={updateNote} onDeleteClick={deleteNote}/>;
-    }, [catchAsyncError, notifyChange, showEditNote]);
+    }, [t, catchAsyncError, notifyChange, showEditNote]);
 
     if (error) {
         return <ErrorPane error={error}/>;

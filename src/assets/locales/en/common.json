@@ -24,12 +24,16 @@
     "state": "State",
     "country": "Country",
     "actions": "Actions",
-    "doYouWantToDelete": "Do you really want to permanently delete this patient?"
+    "doYouWantToDelete": "Do you really want to permanently delete this patient?",
+    "patientSaved": "The patient has been saved!",
+    "patientDeleted": "The patient has been deleted!"
   },
   "note": {
     "notes": "Notes",
     "addNote": "Write a note",
     "addNoteFor": "Write a note for {{patient}}",
+    "noteSaved": "The note has been saved!",
+    "noteDeleted": "The note has been deleted!",
     "content": "Content",
     "doYouWantToDelete": "Do you really want to delete this note?"
   },

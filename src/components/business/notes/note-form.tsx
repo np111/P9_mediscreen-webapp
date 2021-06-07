@@ -9,6 +9,7 @@ import {Input} from '../../ui/form/input';
 import {useForm} from '../../ui/form/use-form';
 import {useTranslation} from '../../ui/i18n/use-translation';
 import {Spin} from '../../ui/spin';
+import {notification} from '../../ui/util/notification';
 
 export interface NoteFormProps {
     patient: ApiPatient;
@@ -34,15 +35,15 @@ export function NoteForm({patient, note, onUpdate}: NoteFormProps) {
             onUpdate?.(newNote);
         }).catch((err) => {
             setLoading(false);
-            if (err instanceof ApiException) {
-                // TODO: Error handling + form validation rules
-                console.log('error', err.error);
+            if (err instanceof ApiException && err.error?.code === 'VALIDATION_FAILED') {
+                notification.open({type: 'error', message: err.error.message});
                 return;
             }
             catchAsyncError(err);
         });
-    }, [patient, note, setLoading, catchAsyncError, form, onUpdate]);
+    }, [patient, note, setLoading, catchAsyncError, onUpdate]);
 
+    // TBD: Form validation rules
     return (
         <Spin spinning={loading}>
             <Form

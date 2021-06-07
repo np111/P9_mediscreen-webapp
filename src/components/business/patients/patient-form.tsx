@@ -15,6 +15,7 @@ import {useTranslation} from '../../ui/i18n/use-translation';
 import {HorizontalSpace, Space} from '../../ui/layout/space';
 import {Popconfirm} from '../../ui/popconfirm';
 import {Spin} from '../../ui/spin';
+import {notification} from '../../ui/util/notification';
 import {Address} from './address';
 import {Birthdate} from './birthdate';
 import {City} from './city';
@@ -53,14 +54,13 @@ export function PatientForm({patient, editable, onUpdate, onDelete}: PatientForm
             onUpdate?.(newPatient);
         }).catch((err) => {
             setLoading(false);
-            if (err instanceof ApiException) {
-                // TODO: Error handling + form validation rules
-                console.log('error', err.error);
+            if (err instanceof ApiException && err.error?.code === 'VALIDATION_FAILED') {
+                notification.open({type: 'error', message: err.error.message});
                 return;
             }
             catchAsyncError(err);
         });
-    }, [patient, setLoading, catchAsyncError, form, onUpdate]);
+    }, [patient, setLoading, catchAsyncError, onUpdate]);
 
     const deletePatient = useCallback(() => {
         if (!patient) return;
@@ -82,6 +82,7 @@ export function PatientForm({patient, editable, onUpdate, onDelete}: PatientForm
         });
     }, [patient, setLoading, catchAsyncError, onDelete]);
 
+    // TBD: Form validation rules
     return (
         <Spin spinning={loading}>
             <ToggleForm
