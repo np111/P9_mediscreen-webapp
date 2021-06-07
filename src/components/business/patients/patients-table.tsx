@@ -8,10 +8,12 @@ import {ApiPatient} from '../../../utils/api/patients-types';
 import {Button} from '../../ui/button';
 import {Input} from '../../ui/form/input';
 import {useTranslation} from '../../ui/i18n/use-translation';
+import {CardClearPadding} from '../../ui/layout/card';
 import {PageHeader} from '../../ui/layout/page-header';
 import {Space} from '../../ui/layout/space';
 import {TableProps} from '../../ui/table';
 import {SkeletonTable} from '../../ui/table/skeleton-table';
+import {ErrorPane} from '../../ui/util/error';
 import {Link} from '../../ui/util/link';
 import {Birthdate} from './birthdate';
 import {FirstName} from './first-name';
@@ -20,7 +22,7 @@ import {LastName} from './last-name';
 
 export function PatientsTable() {
     const {t} = useTranslation();
-    const {data: patients} = useSWR<ApiPatient[]>(['patients', '/patient'], apiClient.fetchSWR); // TODO: Error handling
+    const {data: patients, error} = useSWR<ApiPatient[]>(['patients', '/patient'], apiClient.fetchSWR);
 
     const tableProps = useMemo<TableProps<ApiPatient>>(() => ({
         rowKey: 'id',
@@ -75,8 +77,12 @@ export function PatientsTable() {
     const onSearchChange = useCallback((e) => setSearch(e.target.value), [setSearch]);
     const filteredPatients = useMemo(() => !patients ? undefined : filterPatients(patients, search), [patients, search]);
 
+    if (error) {
+        return <ErrorPane error={error}/>;
+    }
+
     return (
-        <>
+        <CardClearPadding bottom={true}>
             <PageHeader
                 title={t('common:page.patientList')}
                 extra={(
@@ -99,7 +105,7 @@ export function PatientsTable() {
                 {...tableProps}
                 dataSource={filteredPatients}
             />
-        </>
+        </CardClearPadding>
     );
 }
 

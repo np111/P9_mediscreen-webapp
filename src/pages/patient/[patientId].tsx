@@ -1,6 +1,5 @@
 import {GetServerSidePropsContext, GetServerSidePropsResult} from 'next';
 import React, {useCallback, useState} from 'react';
-import {AssessmentBanner} from '../../components/business/assessments/assessment-banner';
 import {NotesList} from '../../components/business/notes/notes-list';
 import {PatientForm} from '../../components/business/patients/patient-form';
 import {getPatientName} from '../../components/business/patients/patient-utils';
@@ -10,7 +9,6 @@ import {useTranslation} from '../../components/ui/i18n/use-translation';
 import {Card} from '../../components/ui/layout/card';
 import {Container} from '../../components/ui/layout/container';
 import {PageHeader} from '../../components/ui/layout/page-header';
-import {Space} from '../../components/ui/layout/space';
 import {AppRouter, routes} from '../../routes';
 import {apiClient, UnhandledApiError} from '../../utils/api/api-client';
 import {ApiPatient} from '../../utils/api/patients-types';
@@ -57,18 +55,7 @@ export default function PatientPage({patient: initialPatient, edit: initialEdita
                     <PatientForm patient={patient} editable={editable} onUpdate={onUpdate} onDelete={onDelete}/>
                 </Card>
                 <Card>
-                    <PageHeader
-                        title={t('common:note.notes')}
-                        extra={(
-                            <Space wrap={true} divider={true}>
-                                <AssessmentBanner key={assessmentKey} patient={patient}/>
-                                <Button type='primary'>{t('common:note.addNote')}</Button>
-                            </Space>
-                        )}
-                    />
-                    <div>
-                        <NotesList patient={patient} onChange={revalidateAssessment}/>
-                    </div>
+                    <NotesList patient={patient} assessmentKey={assessmentKey} onChange={revalidateAssessment}/>
                 </Card>
             </Container>
         </MainLayout>

@@ -31,7 +31,7 @@ export function TopNavigation({currentPage, transparent}: TopNavigationProps) {
                             <a>
                                 <img
                                     alt={t('common:logoTag')}
-                                    width='230px'
+                                    width='289px'
                                     height='60px'
                                     src={logo}
                                     srcSet={logo + ' 1x, ' + logo2x + ' 2x'}

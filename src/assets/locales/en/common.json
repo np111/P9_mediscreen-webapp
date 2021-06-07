@@ -45,6 +45,10 @@
     "termsList": "Triggering terms: {{terms}}",
     "missingField": "A required field is incomplete: {{field}}"
   },
+  "errors": {
+    "unexpected": "An unexpected error occurred.",
+    "unexpectedShort": "Unexpected error"
+  },
   "yes": "Yes",
   "add": "Add",
   "edit": "Edit",
@@ -52,5 +56,6 @@
   "reset": "Reset",
   "save": "Save",
   "delete": "Delete",
-  "notAvailable": "N/A"
+  "notAvailable": "N/A",
+  "showDetails": "Show details"
 }

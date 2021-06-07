@@ -9,22 +9,28 @@ import {Button} from '../../ui/button';
 import {useTranslation} from '../../ui/i18n/use-translation';
 import {List} from '../../ui/layout/list';
 import {Modal} from '../../ui/layout/modal';
+import {PageHeader} from '../../ui/layout/page-header';
 import {Space} from '../../ui/layout/space';
 import {Popconfirm} from '../../ui/popconfirm';
 import {Skeleton} from '../../ui/skeleton';
+import {ErrorPane} from '../../ui/util/error';
+import {AssessmentBanner} from '../assessments/assessment-banner';
 import {getPatientName} from '../patients/patient-utils';
 import {NoteForm} from './note-form';
 
 export interface NotesListProps {
     patient: ApiPatient;
+    assessmentKey?: any;
     onChange?: () => void;
 }
 
-export function NotesList({patient, onChange}: NotesListProps) {
+export function NotesList({patient, assessmentKey, onChange}: NotesListProps) {
     const {t} = useTranslation();
     const catchAsyncError = useCatchAsyncError();
 
-    const {data: notes, revalidate: revalidateNotes} = useSWR<ApiNote[]>(['notes', '/note?patientId=' + encodeURIComponent(patient.id)], apiClient.fetchSWR); // TODO: Error handling
+    const {data: notes, revalidate: revalidateNotes, error} = useSWR<ApiNote[]>(
+        ['notes', '/note?patientId=' + encodeURIComponent(patient.id)],
+        apiClient.fetchSWR);
     const notifyChange = useCallback(() => {
         onChange?.();
         revalidateNotes();
@@ -64,30 +70,44 @@ export function NotesList({patient, onChange}: NotesListProps) {
         return <NoteItem key={note.id} note={note} onUpdateClick={updateNote} onDeleteClick={deleteNote}/>;
     }, [catchAsyncError, notifyChange, showEditNote]);
 
+    if (error) {
+        return <ErrorPane error={error}/>;
+    }
+
     return (
         <>
-            <Button onClick={showAddNote}>{t('common:note.addNote')}</Button>
-            <Modal
-                visible={!!editNote}
-                onCancel={hideEditNote}
-                title={t('common:note.addNoteFor', {patient: getPatientName(t, patient)})}
-                width='1000px'
-                footer={null}
-            >
-                <NoteForm
-                    key={editNote?.key}
-                    patient={patient}
-                    note={editNote?.note}
-                    onUpdate={onNoteUpdate}
-                />
-            </Modal>
-            {!notes ? <Skeleton paragraph={{rows: 4}} active={true}/> : (
-                <List
-                    itemLayout='vertical'
-                    dataSource={notes}
-                    renderItem={renderNoteItem}
-                />
-            )}
+            <PageHeader
+                title={t('common:note.notes')}
+                extra={(
+                    <Space wrap={true} divider={true}>
+                        <AssessmentBanner key={assessmentKey} patient={patient}/>
+                        <Button type='primary' onClick={showAddNote}>{t('common:note.addNote')}</Button>
+                    </Space>
+                )}
+            />
+            <div>
+                <Modal
+                    visible={!!editNote}
+                    onCancel={hideEditNote}
+                    title={t('common:note.addNoteFor', {patient: getPatientName(t, patient)})}
+                    width='1000px'
+                    footer={null}
+                >
+                    <NoteForm
+                        key={editNote?.key}
+                        patient={patient}
+                        note={editNote?.note}
+                        onUpdate={onNoteUpdate}
+                    />
+                </Modal>
+                {!notes ? <Skeleton paragraph={{rows: 4}} active={true}/> : (
+                    <List
+                        itemLayout='vertical'
+                        dataSource={notes}
+                        renderItem={renderNoteItem}
+                    />
+                )}
+            </div>
         </>
     );
 }

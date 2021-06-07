@@ -8,13 +8,14 @@ import {useTranslation} from '../../ui/i18n/use-translation';
 import {Spin} from '../../ui/spin';
 import {Tag} from '../../ui/tag';
 import {Tooltip} from '../../ui/tooltip';
+import {ErrorTag} from '../../ui/util/error';
 
 export interface AssessmentBannerProps {
     patient: ApiPatient;
 }
 
 export function AssessmentBanner({patient}: AssessmentBannerProps) {
-    const {data: assessment} = useSWR<AssessmentResult>( // TODO: Error handling
+    const {data: assessment, error} = useSWR<AssessmentResult>(
         ['assessment', '/assessment', patient.id],
         (service, url, patientId) => apiClient
             .fetch<ApiCheckRiskResult>({service, url, body: {patientId}})
@@ -27,6 +28,10 @@ export function AssessmentBanner({patient}: AssessmentBannerProps) {
                 }
                 throw new UnhandledApiError(res.error);
             }));
+
+    if (error) {
+        return <ErrorTag error={error}/>;
+    }
 
     return (
         <Trans
