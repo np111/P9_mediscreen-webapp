@@ -6,6 +6,7 @@
     "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn')===-1)throw new Error('You must use Yarn to install, not NPM')\"",
     "postinstall": "patch-package",
     "lint": "eslint --ext '.ts,.tsx' src/",
+    "test": "echo There are no tests to run",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
